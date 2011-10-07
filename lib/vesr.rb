@@ -1,1 +1,1 @@
-Dir.glob(File.join(File.dirname(__FILE__), '/prawn/*.rb')).sort.each { |lib| require lib }
+Dir.glob(File.join(File.dirname(__FILE__), '/vesr/*.rb')).sort.each { |lib| require lib }

@@ -1,8 +1,10 @@
+require 'action_view/helpers/translation_helper'
+require 'action_view/helpers'
+
 module Prawn
   module EsrRecipe
 
     include ActionView::Helpers::TranslationHelper
-    include ApplicationHelper
 
     def esr_recipe(invoice, esr_account, sender)
       # VESR form
