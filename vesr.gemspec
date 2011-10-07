@@ -19,13 +19,16 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "lib/prawn/esr_recipe.rb",
     "lib/vesr.rb",
     "test/helper.rb",
-    "test/test_vesr.rb"
+    "test/test_vesr.rb",
+    "vesr.gemspec"
   ]
   s.homepage = %q{http://github.com/raskhadafi/vesr}
   s.licenses = [%q{MIT}]
