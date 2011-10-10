@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{vesr}
-  s.version = "0.1.0"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Roman Simecek}]
-  s.date = %q{2011-10-07}
+  s.date = %q{2011-10-10}
   s.description = %q{VESR}
   s.email = %q{roman.simecek@cyt.ch}
   s.extra_rdoc_files = [
@@ -24,6 +24,18 @@ Gem::Specification.new do |s|
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "app/controllers/esr_bookings_controller.rb",
+    "app/models/esr_file.rb",
+    "app/models/esr_record.rb",
+    "app/views/esr_bookings/_form.html.erb",
+    "app/views/esr_bookings/_item.html.erb",
+    "app/views/esr_bookings/_list_footer.html.erb",
+    "app/views/esr_bookings/_list_header.html.erb",
+    "app/views/esr_bookings/_list_records.html.erb",
+    "app/views/esr_bookings/_navigation_section.html.erb",
+    "app/views/esr_bookings/_sidebar.html.erb",
+    "app/views/esr_bookings/list.html.erb",
+    "app/views/esr_bookings/show.html.erb",
     "lib/vesr.rb",
     "lib/vesr/prawn.rb",
     "lib/vesr/prawn/esr_recipe.rb",
