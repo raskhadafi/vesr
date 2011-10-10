@@ -133,7 +133,8 @@ module Prawn
     end
 
     def esr_number(esr_id, customer_id, invoice_id)
-      esr_id.to_s + sprintf('%013i', customer_id).delete(' ') + sprintf('%07i', invoice_id).delete(' ')
+      customer_id_length = 19 - esr_id.to_s.length
+      esr_id.to_s + sprintf("%0#{customer_id_length}i", customer_id).delete(' ') + sprintf('%07i', invoice_id).delete(' ')
     end
 
     def esr9_add_validation_digit(value)
