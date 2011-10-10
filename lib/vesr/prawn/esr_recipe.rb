@@ -27,7 +27,7 @@ module Prawn
         text vcard.street_address
         text vcard.postal_code + " " + vcard.locality
 
-        move_down cm2pt(0.7)
+        move_down cm2pt(0.8)
         indent cm2pt(2.3) do
           font_size 9 do
             text esr_account.pc_id
@@ -37,13 +37,13 @@ module Prawn
 
       bounding_box [0, cm2pt(4.5)], :width => cm2pt(3.5) do
         font_size 9 do
-          text sprintf('%.0f', amount.floor), :align => :right
+          text sprintf('%.0f', amount.floor), :align => :right, :character_spacing => 1
         end
       end
 
       bounding_box [cm2pt(4.7), cm2pt(4.5)], :width => cm2pt(1) do
         font_size 9 do
-          text sprintf('%02.0f', amount * 100 % 100)
+          text sprintf('%02.0f', amount * 100 % 100), :character_spacing => 1
         end
       end
 
@@ -73,7 +73,7 @@ module Prawn
         text vcard.street_address
         text vcard.postal_code + " " + vcard.locality
 
-        move_down cm2pt(0.7)
+        move_down cm2pt(0.8)
         indent cm2pt(2.6) do
           font_size 9 do
             text esr_account.pc_id
@@ -83,18 +83,18 @@ module Prawn
 
       bounding_box [cm2pt(6), cm2pt(4.5)], :width => cm2pt(3.5) do
         font_size 9 do
-          text sprintf('%.0f', amount.floor), :align => :right
+          text sprintf('%.0f', amount.floor), :align => :right, :character_spacing => 1
         end
       end
 
       bounding_box [cm2pt(10.8), cm2pt(4.5)], :width => cm2pt(1) do
         font_size 9 do
-          text sprintf('%02.0f', amount * 100 % 100)
+          text sprintf('%02.0f', amount * 100 % 100), :character_spacing => 1
         end
       end
 
       font_size 10 do
-        draw_text esr9_reference(invoice, esr_account), :at => [cm2pt(12.3), cm2pt(5.9)]
+        draw_text esr9_reference(invoice, esr_account), :at => [cm2pt(12.3), cm2pt(5.9)], :character_spacing => 0.6
       end
 
       bounding_box [cm2pt(12.1), cm2pt(4.5)], :width => cm2pt(7.5) do
@@ -107,10 +107,10 @@ module Prawn
       end
 
       # ESR-Reference
-      font_size 10
+      font_size 11
       font ::Rails.root.join('data/ocrb10.ttf') if FileTest.exists?(::Rails.root.join('data/ocrb10.ttf'))
 
-      draw_text esr9(invoice, esr_account), :at => [cm2pt(5.2), 0]
+      draw_text esr9(invoice, esr_account), :at => [cm2pt(6.3), cm2pt(0.9)]
     end
 
     private
