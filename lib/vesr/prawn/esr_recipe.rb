@@ -120,20 +120,20 @@ module Prawn
     end
 
     def esr9_reference(invoice, esr_account)
-      esr9_format(esr9_add_validation_digit(esr_number(esr_account.esr_id, invoice.customer.id)))
+      esr9_format(esr9_add_validation_digit(esr_number(esr_account.esr_id, invoice.customer.id, invoice.id)))
     end
 
     def esr9_build(esr_amount, invoice, biller_id, esr_id)
       # 01 is type 'Einzahlung in CHF'
       amount_string = "01#{sprintf('%011.2f', esr_amount).delete('.')}"
-      id_string = esr_number(esr_id, invoice.customer.id)
+      id_string = esr_number(esr_id, invoice.customer.id, invoice.id)
       biller_string = esr9_format_account_id(biller_id)
 
       "#{esr9_add_validation_digit(amount_string)}>#{esr9_add_validation_digit(id_string)}+ #{biller_string}>"
     end
 
-    def esr_number(esr_id, customer_id)
-      esr_id.to_s + sprintf('%013i', customer_id).delete(' ') + sprintf('%07i', id).delete(' ')
+    def esr_number(esr_id, customer_id, invoice_id)
+      esr_id.to_s + sprintf('%013i', customer_id).delete(' ') + sprintf('%07i', invoice_id).delete(' ')
     end
 
     def esr9_add_validation_digit(value)
