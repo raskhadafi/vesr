@@ -132,8 +132,8 @@ module Prawn
       "#{esr9_add_validation_digit(amount_string)}>#{esr9_add_validation_digit(id_string)}+ #{biller_string}>"
     end
 
-    def esr_number(esr_id, patient_id)
-      esr_id.to_s + sprintf('%013i', patient_id).delete(' ') + sprintf('%07i', id).delete(' ')
+    def esr_number(esr_id, customer_id)
+      esr_id.to_s + sprintf('%013i', customer_id).delete(' ') + sprintf('%07i', id).delete(' ')
     end
 
     def esr9_add_validation_digit(value)
