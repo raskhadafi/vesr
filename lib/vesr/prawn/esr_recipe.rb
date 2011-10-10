@@ -43,7 +43,7 @@ module Prawn
 
       bounding_box [cm2pt(4.7), cm2pt(4.5)], :width => cm2pt(1) do
         font_size 9 do
-          text sprintf('%.0f', amount * 100 % 100)
+          text sprintf('%02.0f', amount * 100 % 100)
         end
       end
 
@@ -89,7 +89,7 @@ module Prawn
 
       bounding_box [cm2pt(10.8), cm2pt(4.5)], :width => cm2pt(1) do
         font_size 9 do
-          text sprintf('%.0f', amount * 100 % 100)
+          text sprintf('%02.0f', amount * 100 % 100)
         end
       end
 
