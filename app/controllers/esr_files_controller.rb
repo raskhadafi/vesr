@@ -1,0 +1,2 @@
+class EsrFilesController < AuthorizedController
+end
