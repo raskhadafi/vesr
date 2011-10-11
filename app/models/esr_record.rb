@@ -98,7 +98,7 @@ class EsrRecord < ActiveRecord::Base
     if Invoice.exists?(invoice_id)
       self.invoice_id = invoice_id
       self.remarks += "Referenz #{reference}"
-      if invoice.due_amount.currency_round != self.amount.currency_round
+      if invoice.balance.currency_round != self.amount.currency_round
         evaluate_bad
         self.state = "bad"
       else
@@ -107,7 +107,7 @@ class EsrRecord < ActiveRecord::Base
     elsif Invoice.column_names.include?(:imported_esr_reference) && imported_invoice = Invoice.find(:first, :conditions => ["imported_esr_reference LIKE concat(?, '%')", reference])
       self.invoice = imported_invoice
       self.remarks += "Referenz #{reference}"
-      if invoice.due_amount.currency_round != self.amount.currency_round
+      if invoice.balance.currency_round != self.amount.currency_round
         self.remarks += ", falscher Betrag"
         self.state = "bad"
       else
