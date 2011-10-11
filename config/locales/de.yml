@@ -1,0 +1,21 @@
+# German locale
+de:
+  activerecord:
+    models:
+      esr_file:   ESR-Datei
+      esr_record: ESR-Eintrag
+    attributes:
+      esr_file:
+        remarks:    Bemerkungen
+        file:       Dateiname
+      esr_record:
+        bank_pc_id:       Teilnehmer-Nr.
+        reference:        Referenz
+        amount:           Betrag
+        transaction_date: Transaktionsdatum
+        payment_date:     Zahldatum
+        value_date:       Valuta Datum
+        invoice:          Rechnung
+        booking:          Buchung
+        state:            Status
+        remarks:          Bemerkungen
