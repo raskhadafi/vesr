@@ -24,8 +24,8 @@ module Prawn
         vcard = sender.vcard
         text vcard.full_name
         text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address
-        text vcard.postal_code + " " + vcard.locality
+        text vcard.street_address if vcard.street_address
+        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
 
         move_down cm2pt(0.8)
         indent cm2pt(2.3) do
@@ -54,9 +54,9 @@ module Prawn
 
         vcard = invoice.customer.vcard
         text vcard.full_name
-        text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address
-        text vcard.postal_code + " " + vcard.locality
+        text vcard.extended_address if vcard.extended_address
+        text vcard.street_address if vcard.street_address
+        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
       end
 
       bounding_box [cm2pt(6), cm2pt(8.8)], :width => cm2pt(5) do
@@ -70,8 +70,8 @@ module Prawn
         vcard = sender.vcard
         text vcard.full_name
         text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address
-        text vcard.postal_code + " " + vcard.locality
+        text vcard.street_address if vcard.street_address
+        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
 
         move_down cm2pt(0.8)
         indent cm2pt(2.6) do
@@ -102,8 +102,8 @@ module Prawn
         text vcard.honorific_prefix if vcard.honorific_prefix
         text vcard.full_name
         text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address
-        text vcard.postal_code + " " + vcard.locality
+        text vcard.street_address if vcard.street_address
+        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
       end
 
       # ESR-Reference
