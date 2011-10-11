@@ -17,9 +17,12 @@ de:
         reference:        Referenz
         amount:           Betrag
         transaction_date: Transaktionsdatum
+        payment_amount:   Zahlbetrag
         payment_date:     Zahldatum
+        saldo:            Saldo
         value_date:       Valuta Datum
         invoice:          Rechnung
+        customer:         Kunde
         booking:          Buchung
         state:            Status
         remarks:          Bemerkungen
