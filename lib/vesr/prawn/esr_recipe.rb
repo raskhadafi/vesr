@@ -94,7 +94,7 @@ module Prawn
       end
 
       font_size 10 do
-        draw_text esr9_reference(invoice, esr_account), :at => [cm2pt(12.3), cm2pt(5.9)], :character_spacing => 0.6
+        draw_text esr9_reference(invoice, esr_account), :at => [cm2pt(12.3), cm2pt(5.9)], :character_spacing => 1.1
       end
 
       bounding_box [cm2pt(12.1), cm2pt(4.5)], :width => cm2pt(7.5) do
