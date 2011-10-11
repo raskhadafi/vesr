@@ -4,10 +4,10 @@ class EsrRecord < ActiveRecord::Base
   belongs_to :booking, :dependent => :destroy
   belongs_to :invoice
   
-  named_scope :valid, :conditions => "state = 'valid'"
-  named_scope :missing, :conditions => "state = 'missing'"
-  named_scope :bad, :conditions => "state = 'bad'"
-  named_scope :invalid, :conditions => "state != 'valid'"
+  scope :valid, where(:state => 'valid')
+  scope :missing, where(:state => 'missing')
+  scope :bad, where(:state => 'bad')
+  scope :invalid, where(:state => 'valid')
   
   private
   def parse_date(value)
