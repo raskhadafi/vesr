@@ -1,0 +1,5 @@
+%tr[esr_file]
+  %td= link_to esr_file.updated_at, esr_file
+  %td.currency= esr_file.esr_records.valid.count
+  %td.currency= esr_file.esr_records.invalid.count
+  %td.currency= sprintf("%0.2f", esr_file.esr_records.sum(:amount) || 0.0)

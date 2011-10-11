@@ -8,6 +8,10 @@ de:
       esr_file:
         remarks:    Bemerkungen
         file:       Dateiname
+        updated_at: Verbucht am
+        bookings:   Buchungen
+        bad_bookings: Fehlerhafte Buchungen
+        total_amount: Total (inkl. fehlerhaft)
       esr_record:
         bank_pc_id:       Teilnehmer-Nr.
         reference:        Referenz
