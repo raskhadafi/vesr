@@ -47,7 +47,7 @@ class EsrRecord < ActiveRecord::Base
     reference[19..-1].to_i
   end
 
-  def patient_id
+  def customer_id
     reference[6..18].to_i
   end
 
