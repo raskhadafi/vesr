@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "VESR invoice support library."
   s.description = "VESR provides support for ESR number calculations and gives ready to use Rails components."
 
-  s.files        = `git ls-files app lib config`.split("\n")
+  s.files        = `git ls-files app lib config db`.split("\n")
   s.platform     = Gem::Platform::RUBY
 
   s.extra_rdoc_files = ["README.rdoc", "LICENSE.txt"]

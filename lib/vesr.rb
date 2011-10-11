@@ -1,1 +1,2 @@
-Dir.glob(File.join(File.dirname(__FILE__), '/vesr/*.rb')).sort.each { |lib| require lib }
+require 'vesr/railtie' if defined?(::Rails::Railtie)
+require 'vesr/prawn'
