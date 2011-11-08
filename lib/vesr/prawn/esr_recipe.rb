@@ -6,7 +6,7 @@ module Prawn
 
     include ActionView::Helpers::TranslationHelper
 
-    def esr_recipe(invoice, esr_account, sender)
+    def esr_recipe(invoice, esr_account, sender, print_payment_for? = true)
       # VESR form
       # =========
       bank = esr_account.bank
@@ -18,7 +18,11 @@ module Prawn
         text bank.vcard.postal_code + " " + bank.vcard.locality
 
         text " "
-        text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
+        if print_payment_for?
+          text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
+        else
+          text " "
+        end
         text " "
 
         vcard = sender.vcard
@@ -64,7 +68,11 @@ module Prawn
         text bank.vcard.postal_code + " " + bank.vcard.locality
 
         text " "
-        text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
+        if print_payment_for?
+          text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
+        else
+          text " "
+        end
         text " "
 
         vcard = sender.vcard
