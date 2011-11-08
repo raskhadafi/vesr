@@ -7,7 +7,7 @@ class EsrRecord < ActiveRecord::Base
   scope :valid, where(:state => 'valid')
   scope :missing, where(:state => 'missing')
   scope :bad, where(:state => 'bad')
-  scope :invalid, where(:state => 'valid')
+  scope :invalid, where(:state => 'invalid')
   
   private
   def parse_date(value)
