@@ -6,119 +6,93 @@ module Prawn
 
     include ActionView::Helpers::TranslationHelper
 
-    def esr_recipe(invoice, esr_account, sender, print_payment_for = true)
-      # VESR form
-      # =========
-      bank = esr_account.bank
-      amount = invoice.amount
+    def draw_account_detail(bank, sender, print_payment_for)
+      text bank.vcard.full_name
+      text bank.vcard.postal_code + " " + bank.vcard.locality
 
-      font_size 8
-      bounding_box [cm2pt(0.2), cm2pt(8.8)], :width => cm2pt(5) do
-        text bank.vcard.full_name
-        text bank.vcard.postal_code + " " + bank.vcard.locality
-
+      text " "
+      if print_payment_for
+        text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
+      else
         text " "
-        if print_payment_for
-          text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
-        else
-          text " "
-        end
-        text " "
-
-        vcard = sender.vcard
-        text vcard.full_name
-        text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address if vcard.street_address
-        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
-
-        move_down cm2pt(0.8)
-        indent cm2pt(2.3) do
-          font_size 9 do
-            text esr_account.pc_id
-          end
-        end
       end
+      text " "
 
-      bounding_box [0, cm2pt(4.5)], :width => cm2pt(3.5) do
-        font_size 9 do
+      draw_address sender.vcard
+    end
+
+    def draw_account(account)
+      bounding_box [cm2pt(2.6), bounds.top - cm2pt(3.4)], :width => cm2pt(2.5) do
+        text account.pc_id
+      end
+    end
+
+    def draw_amount(amount)
+      font_size 9 do
+        bounding_box [0, bounds.top - cm2pt(4.2)], :width => cm2pt(3.6) do
           text sprintf('%.0f', amount.floor), :align => :right, :character_spacing => 1
         end
-      end
 
-      bounding_box [cm2pt(4.7), cm2pt(4.5)], :width => cm2pt(1) do
-        font_size 9 do
+        bounding_box [cm2pt(4.7), bounds.top - cm2pt(4.2)], :width => cm2pt(1) do
           text sprintf('%02.0f', amount * 100 % 100), :character_spacing => 1
         end
       end
+    end
 
-      bounding_box [cm2pt(0.2), cm2pt(3.2)], :width => cm2pt(5) do
-        text esr9_reference(invoice, esr_account)
+    # VESR form
+    # =========
+    def esr_recipe(invoice, account, sender, print_payment_for)
+      bounding_box [cm2pt(0.4), cm2pt(9.6)], :width => cm2pt(5) do
+        indent cm2pt(0.2) do
+          draw_account_detail(account.bank, sender, print_payment_for)
+        end
+        draw_account(account)
+        draw_amount(invoice.amount)
 
-        text " "
+        bounding_box [cm2pt(0.2), bounds.top - cm2pt(5.2)], :width => cm2pt(5) do
+          text esr9_reference(invoice, account), :size => 7
 
-        vcard = invoice.customer.vcard
-        text vcard.full_name
-        text vcard.extended_address if vcard.extended_address
-        text vcard.street_address if vcard.street_address
-        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
-      end
-
-      bounding_box [cm2pt(6), cm2pt(8.8)], :width => cm2pt(5) do
-        text bank.vcard.full_name
-        text bank.vcard.postal_code + " " + bank.vcard.locality
-
-        text " "
-        if print_payment_for
-          text I18n::translate(:biller, :scope => "activerecord.attributes.invoice")
-        else
           text " "
-        end
-        text " "
 
-        vcard = sender.vcard
-        text vcard.full_name
-        text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address if vcard.street_address
-        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
-
-        move_down cm2pt(0.8)
-        indent cm2pt(2.6) do
-          font_size 9 do
-            text esr_account.pc_id
-          end
+          draw_address invoice.customer.vcard
         end
       end
 
-      bounding_box [cm2pt(6), cm2pt(4.5)], :width => cm2pt(3.5) do
-        font_size 9 do
-          text sprintf('%.0f', amount.floor), :align => :right, :character_spacing => 1
-        end
-      end
-
-      bounding_box [cm2pt(10.8), cm2pt(4.5)], :width => cm2pt(1) do
-        font_size 9 do
-          text sprintf('%02.0f', amount * 100 % 100), :character_spacing => 1
-        end
+      bounding_box [cm2pt(6.4), cm2pt(9.6)], :width => cm2pt(5) do
+        draw_account_detail(account.bank, sender, print_payment_for)
+        draw_account(account)
+        draw_amount(invoice.amount)
       end
 
       font_size 10 do
-        draw_text esr9_reference(invoice, esr_account), :at => [cm2pt(12.3), cm2pt(5.9)], :character_spacing => 1.1
+        draw_text esr9_reference(invoice, account), :at => [cm2pt(12.7), cm2pt(6.8)], :character_spacing => 1.1
       end
 
-      bounding_box [cm2pt(12.1), cm2pt(4.5)], :width => cm2pt(7.5) do
-        vcard = invoice.customer.vcard
-        text vcard.honorific_prefix if vcard.honorific_prefix
-        text vcard.full_name
-        text vcard.extended_address if vcard.extended_address.present?
-        text vcard.street_address if vcard.street_address
-        text vcard.postal_code + " " + vcard.locality if vcard.postal_code and vcard.locality
+      bounding_box [cm2pt(12.7), cm2pt(5.5)], :width => cm2pt(7.5) do
+        draw_address(invoice.customer.vcard)
       end
 
       # ESR-Reference
-      font_size 11
-      font ::Rails.root.join('data/ocrb10.ttf') if ::Rails.root.join('data/ocrb10.ttf').exist?
+      if ::Rails.root.join('data/ocrb10.ttf').exist?
+        ocr_font = ::Rails.root.join('data/ocrb10.ttf')
+      else
+        ocr_font = "Helvetica"
+        ::Rails.logger.warn("No ocrb10.ttf found for ESR reference in #{::Rails.root.join('data')}!")
+      end
 
-      draw_text esr9(invoice, esr_account), :at => [cm2pt(6.3), cm2pt(0.9)]
+      font ocr_font, :size => 10 do
+        draw_text esr9(invoice, account), :at => [cm2pt(6.7), cm2pt(1.7)], :character_spacing => 2.2
+      end
+    end
+
+    def draw_esr(invoice, account, sender, print_payment_for = true)
+      float do
+        canvas do
+          font_size 8 do
+            esr_recipe(invoice, account, sender, print_payment_for)
+          end
+        end
+      end
     end
 
     private
