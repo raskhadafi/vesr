@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vesr (0.1.2)
+    vesr (0.6.0)
 
 GEM
   remote: http://rubygems.org/
