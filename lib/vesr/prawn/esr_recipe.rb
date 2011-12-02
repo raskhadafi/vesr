@@ -90,7 +90,7 @@ module Prawn
         ::Rails.logger.warn("No ocrb10.ttf found for ESR reference in #{::Rails.root.join('data')}!")
       end
 
-      font ocr_font, :size => 10 do
+      font ocr_font, :size => 11 do
         draw_text esr9(invoice, account), :at => [cm2pt(6.7), cm2pt(1.7)], :character_spacing => 2.2
       end
     end
