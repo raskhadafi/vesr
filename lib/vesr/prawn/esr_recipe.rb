@@ -21,6 +21,16 @@ module Prawn
       draw_address sender.vcard
     end
 
+    # Draws the full address of a vcard
+    def draw_address(vcard)
+      lines = [vcard.full_name, vcard.extended_address, vcard.street_address, vcard.post_office_box, "#{vcard.postal_code} #{vcard.locality}"]
+      lines = lines.map {|line| line.strip unless (line.nil? or line.strip.empty?)}.compact
+
+      lines.each do |line|
+        text line
+      end
+    end
+
     def draw_account(account)
       bounding_box [cm2pt(2.6), bounds.top - cm2pt(3.4)], :width => cm2pt(2.5) do
         text account.pc_id
