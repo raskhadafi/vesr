@@ -33,12 +33,14 @@ module Prawn
 
     def draw_account(account)
       bounding_box [cm2pt(2.6), bounds.top - cm2pt(3.4)], :width => cm2pt(2.5) do
-        text account.pc_id
+        font_size 9 do
+          text account.pc_id
+        end
       end
     end
 
     def draw_amount(amount)
-      font_size 9 do
+      font_size 10 do
         bounding_box [0, bounds.top - cm2pt(4.2)], :width => cm2pt(3.6) do
           text sprintf('%.0f', amount.floor), :align => :right, :character_spacing => 1
         end
@@ -75,7 +77,9 @@ module Prawn
       end
 
       font_size 10 do
-        draw_text esr9_reference(invoice, account), :at => [cm2pt(12.7), cm2pt(6.8)], :character_spacing => 1.1
+        character_spacing 1.1 do
+          draw_text esr9_reference(invoice, account), :at => [cm2pt(12.7), cm2pt(6.8)]
+        end
       end
 
       bounding_box [cm2pt(12.7), cm2pt(5.5)], :width => cm2pt(7.5) do
@@ -91,7 +95,9 @@ module Prawn
       end
 
       font ocr_font, :size => 11 do
-        draw_text esr9(invoice, account), :at => [cm2pt(6.7), cm2pt(1.7)], :character_spacing => 2.2
+        character_spacing 0.5 do
+          draw_text esr9(invoice, account), :at => [cm2pt(6.7), cm2pt(1.7)]
+        end
       end
     end
 
