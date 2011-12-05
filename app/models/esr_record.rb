@@ -40,7 +40,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def client_id
-    reference[0..5]
+    reference[0..7]
   end
 
   def invoice_id
@@ -48,7 +48,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def customer_id
-    reference[6..18].to_i
+    reference[8..18].to_i
   end
 
   def parse(line)
