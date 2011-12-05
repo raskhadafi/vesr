@@ -1,7 +1,7 @@
 class EsrRecord < ActiveRecord::Base
   belongs_to :esr_file
   
-  belongs_to :booking, :dependent => :destroy
+  belongs_to :booking, :dependent => :destroy, :autosave => true
   belongs_to :invoice
   
   scope :valid, where(:state => 'valid')
@@ -141,8 +141,6 @@ class EsrRecord < ActiveRecord::Base
       :title          => "VESR Zahlung",
       :comments       => remarks)
     
-    esr_booking.save
- 
     self.booking = esr_booking
     
     return esr_booking
