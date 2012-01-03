@@ -153,10 +153,16 @@ module Prawn
       reference_code.reverse.gsub(/(.....)/, '\1 ').reverse
     end
 
+    # Formats an account number for ESR
+    #
+    # Account numbers for ESR should have the following format:
+    # XXYYYYYYZ, where the number of digits is fixed. We support
+    # providing the number in the format XX-YYYY-Z which is more
+    # common in written communication.
     def esr9_format_account_id(account_id)
       (pre, main, post) = account_id.split('-')
 
-      sprintf('%02i%06i%1i', pre, main, post)
+      sprintf('%02i%06i%1i', pre.to_i, main.to_i, post.to_i)
     end
   end
 end
