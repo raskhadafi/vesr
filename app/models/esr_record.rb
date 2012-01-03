@@ -69,7 +69,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   # Invoices
-  before_create :assign_invoice, :create_esr_booking
+  before_create :assign_invoice, :build_esr_booking
   
   private
   def evaluate_bad
@@ -125,7 +125,7 @@ class EsrRecord < ActiveRecord::Base
     BankAccount.find_by_esr_id(client_id)
   end
 
-  def create_esr_booking
+  def build_esr_booking
     if invoice
       esr_booking = invoice.bookings.build
     else
