@@ -104,7 +104,7 @@ module Prawn
     def draw_esr(invoice, account, sender, print_payment_for = true)
       float do
         canvas do
-          font_size 8 do
+          font 'Helvetica', :size => 8 do
             esr_recipe(invoice, account, sender, print_payment_for)
           end
         end
