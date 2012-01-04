@@ -113,7 +113,7 @@ module Prawn
 
     private
     # ESR helpers
-    def esr9(invoice, esr_account, amount)
+    def esr9(invoice, esr_account)
       esr9_build(invoice.due_amount.currency_round, invoice, esr_account.pc_id, esr_account.esr_id)
     end
 
