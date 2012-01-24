@@ -59,7 +59,7 @@ module Prawn
           draw_account_detail(account.bank, sender, print_payment_for)
         end
         draw_account(account)
-        draw_amount(invoice.due_amount.currency_round)
+        draw_amount(invoice.balance.currency_round)
 
         bounding_box [cm2pt(0.2), bounds.top - cm2pt(5.2)], :width => cm2pt(5) do
           text esr9_reference(invoice, account), :size => 7
@@ -73,7 +73,7 @@ module Prawn
       bounding_box [cm2pt(6.4), cm2pt(9.6)], :width => cm2pt(5) do
         draw_account_detail(account.bank, sender, print_payment_for)
         draw_account(account)
-        draw_amount(invoice.due_amount.currency_round)
+        draw_amount(invoice.balance.currency_round)
       end
 
       font_size 10 do
@@ -114,7 +114,7 @@ module Prawn
     private
     # ESR helpers
     def esr9(invoice, esr_account)
-      esr9_build(invoice.due_amount.currency_round, invoice, esr_account.pc_id, esr_account.esr_id)
+      esr9_build(invoice.balance.currency_round, invoice, esr_account.pc_id, esr_account.esr_id)
     end
 
     def esr9_reference(invoice, esr_account)
