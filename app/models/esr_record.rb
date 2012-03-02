@@ -95,7 +95,7 @@ class EsrRecord < ActiveRecord::Base
   def update_remarks
     if invoice.state == 'paid'
       # already paid
-      if invoice.amount == self.amount.currency_round
+      if invoice.amount == self.amount
         # paid twice
         self.remarks += ", doppelt bezahlt"
       else
@@ -104,7 +104,7 @@ class EsrRecord < ActiveRecord::Base
     elsif !(invoice.active)
       # canceled invoice
       self.remarks += ", wurde bereits #{invoice.state_adverb}"
-    elsif invoice.amount == self.amount.currency_round
+    elsif invoice.amount == self.amount
       # TODO much too open condition (issue #804)
       # reminder fee not paid
       self.remarks += ", Mahnspesen nicht bezahlt"
@@ -120,7 +120,7 @@ class EsrRecord < ActiveRecord::Base
       return
     end
 
-    balance = self.invoice.balance.currency_round
+    balance = self.invoice.balance
     if balance == 0
       self.state = 'paid'
     elsif balance > 0
