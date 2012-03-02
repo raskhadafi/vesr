@@ -6,10 +6,14 @@ class EsrFile < ActiveRecord::Base
   
   def to_s(format = :default)
     case format
-    when :long
-      esr_records.map{|record| record.to_s}.join("\n")
-    else
+    when :short
       "#{updated_at.strftime('%d.%m.%Y')}: #{esr_records.count} Buchungen"
+    else
+      s = ''
+      esr_records.each {|record|
+        s += record.to_s + "\n"
+      }
+      s
     end
   end
 

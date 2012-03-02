@@ -4,11 +4,35 @@ class EsrRecord < ActiveRecord::Base
   belongs_to :booking, :dependent => :destroy, :autosave => true
   belongs_to :invoice
   
-  scope :valid, where(:state => 'valid')
-  scope :missing, where(:state => 'missing')
-  scope :bad, where(:state => 'bad')
-  scope :invalid, where(:state => 'invalid')
-  
+  # State Machine
+  include AASM
+  aasm_column :state
+  validates_presence_of :state
+
+  aasm_initial_state :ready
+  aasm_state :ready
+  aasm_state :paid
+  aasm_state :missing
+  aasm_state :overpaid
+  aasm_state :underpaid
+  aasm_state :resolved
+
+  aasm_event :write_off do
+    transitions :from => :underpaid, :to => :resolved
+  end
+
+  aasm_event :resolve do
+    transitions :from => :underpaid, :to => :resolved
+  end
+
+  aasm_event :book_extra_earning do
+    transitions :from => [:overpaid, :missing], :to => :resolved
+  end
+
+  scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved'])
+  scope :unsolved, where(:state => ['overpaid', 'underpaid', 'missing'])
+  scope :valid, where(:state => 'paid')
+
   private
   def parse_date(value)
     year  = value[0..1].to_i + 2000
@@ -68,14 +92,10 @@ class EsrRecord < ActiveRecord::Base
     self
   end
 
-  # Invoices
-  before_create :assign_invoice, :build_esr_booking
-  
-  private
-  def evaluate_bad
+  def update_remarks
     if invoice.state == 'paid'
       # already paid
-      if invoice.amount.currency_round == self.amount.currency_round
+      if invoice.amount == self.amount.currency_round
         # paid twice
         self.remarks += ", doppelt bezahlt"
       else
@@ -83,8 +103,8 @@ class EsrRecord < ActiveRecord::Base
       end
     elsif !(invoice.active)
       # canceled invoice
-      self.remarks += ", wurde #{invoice.state_adverb}"
-    elsif invoice.amount.currency_round == self.amount.currency_round
+      self.remarks += ", wurde bereits #{invoice.state_adverb}"
+    elsif invoice.amount == self.amount.currency_round
       # TODO much too open condition (issue #804)
       # reminder fee not paid
       self.remarks += ", Mahnspesen nicht bezahlt"
@@ -93,30 +113,52 @@ class EsrRecord < ActiveRecord::Base
       self.remarks += ", falscher Betrag"
     end
   end
+
+  def update_state
+    if self.invoice.nil?
+      self.state = 'missing'
+      return
+    end
+
+    balance = self.invoice.balance.currency_round
+    if balance == 0
+      self.state = 'paid'
+    elsif balance > 0
+      self.state = 'underpaid'
+    elsif balance < 0
+      self.state = 'overpaid'
+    end
+  end
+
+  def self.update_unsolved_states
+    self.unsolved.find_each do |e|
+      e.update_state
+      e.save
+    end
+  end
+
+  # Invoices
+  before_create :assign_invoice, :create_esr_booking
   
+  private
   def assign_invoice
     # Prepare remarks to not be null
     self.remarks ||= ''
+
+    self.remarks += "Referenz #{reference}"
+
     if Invoice.exists?(invoice_id)
       self.invoice_id = invoice_id
-      self.remarks += "Referenz #{reference}"
-      if invoice.balance.currency_round != self.amount.currency_round
-        evaluate_bad
-        self.state = "bad"
-      else
-        self.state = "valid"
-      end
-    elsif Invoice.column_names.include?(:imported_esr_reference) && imported_invoice = Invoice.find(:first, :conditions => ["imported_esr_reference LIKE concat(?, '%')", reference])
+      update_remarks
+      update_state
+
+    elsif imported_invoice = Invoice.find(:first, :conditions => ["imported_esr_reference LIKE concat(?, '%')", reference])
       self.invoice = imported_invoice
-      self.remarks += "Referenz #{reference}"
-      if invoice.balance.currency_round != self.amount.currency_round
-        self.remarks += ", falscher Betrag"
-        self.state = "bad"
-      else
-        self.state = "valid"
-      end
+      update_remarks
+      update_state
+
     else
-      self.remarks += "Rechnung ##{invoice_id} nicht gefunden"
+      self.remarks += ", Rechnung ##{invoice_id} nicht gefunden"
       self.state = "missing"
     end
   end
@@ -125,7 +167,7 @@ class EsrRecord < ActiveRecord::Base
     BankAccount.find_by_esr_id(client_id)
   end
 
-  def build_esr_booking
+  def create_esr_booking
     if invoice
       esr_booking = invoice.bookings.build
     else
@@ -140,8 +182,20 @@ class EsrRecord < ActiveRecord::Base
       :title          => "VESR Zahlung",
       :comments       => remarks)
     
+    esr_booking.save
+ 
     self.booking = esr_booking
     
     return esr_booking
+  end
+
+public
+  def create_extra_earning_booking(comments = nil)
+    Booking.create(:title => "Ausserordentlicher Ertrag",
+                   :comments => comments || "Zahlung kann keiner Rechnung zugewiesen werden",
+                   :amount => self.amount,
+                   :debit_account  => Account.find_by_code(Invoice.settings['invoices.extra_earnings_account_code']),
+                   :credit_account => Account.find_by_code(Invoice.settings['invoices.balance_account_code']),
+                   :value_date => Date.today)
   end
 end
