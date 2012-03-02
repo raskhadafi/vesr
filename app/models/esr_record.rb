@@ -93,7 +93,9 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def update_remarks
-    if invoice.state == 'paid'
+    if invoice.nil?
+      self.remarks += ", Rechnung ##{invoice_id} nicht gefunden"
+    elsif invoice.state == 'paid'
       # already paid
       if invoice.amount == self.amount
         # paid twice
@@ -138,7 +140,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   # Invoices
-  before_create :assign_invoice, :create_esr_booking
+  before_create :assign_invoice, :create_esr_booking, :update_remarks, :update_state
   
   private
   def assign_invoice
@@ -149,17 +151,8 @@ class EsrRecord < ActiveRecord::Base
 
     if Invoice.exists?(invoice_id)
       self.invoice_id = invoice_id
-      update_remarks
-      update_state
-
     elsif Invoice.column_names.include?(:imported_esr_reference) && imported_invoice = Invoice.find(:first, :conditions => ["imported_esr_reference LIKE concat(?, '%')", reference])
       self.invoice = imported_invoice
-      update_remarks
-      update_state
-
-    else
-      self.remarks += ", Rechnung ##{invoice_id} nicht gefunden"
-      self.state = "missing"
     end
   end
   
