@@ -163,14 +163,16 @@ class EsrRecord < ActiveRecord::Base
   def create_esr_booking
     if invoice
       esr_booking = invoice.bookings.build
+      debit_account = invoice.balance_account
     else
       esr_booking = Booking.new
+      debit_account = Invoice.direct_account
     end
     
     esr_booking.update_attributes(
       :amount         => amount,
       :credit_account => vesr_account,
-      :debit_account  => invoice.balance_account,
+      :debit_account  => debit_account,
       :value_date     => value_date,
       :title          => "VESR Zahlung",
       :comments       => remarks)
