@@ -175,7 +175,8 @@ class EsrRecord < ActiveRecord::Base
       :debit_account  => debit_account,
       :value_date     => value_date,
       :title          => "VESR Zahlung",
-      :comments       => remarks)
+      :comments       => remarks
+    )
     
     esr_booking.save
  
