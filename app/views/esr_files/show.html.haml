@@ -8,6 +8,10 @@
 - if params['show_valid'].present?
   %h3 Korrekte Zahlungen
   = render 'esr_records/list', :esr_records => @esr_file.esr_records.valid
+- else
+  .alert-message.block-message.fade.in.success{'data-alert' => 'alert'}
+    %a.close{:href => '#'} &times;
+    = "%{@esr_file.esr_records.valid.count} korrekt verbucht."
 
 - unless @esr_file.esr_records.invalid.empty?
   %h3 Falscher Betrag
