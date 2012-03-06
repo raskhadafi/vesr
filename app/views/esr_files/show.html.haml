@@ -11,7 +11,7 @@
 - else
   .alert-message.block-message.fade.in.success{'data-alert' => 'alert'}
     %a.close{:href => '#'} &times;
-    = "%{@esr_file.esr_records.valid.count} korrekt verbucht."
+    = "#{@esr_file.esr_records.valid.count} korrekt verbuchte Zahlungen."
 
 - unless @esr_file.esr_records.invalid.empty?
   %h3 Falscher Betrag
