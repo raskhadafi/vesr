@@ -93,27 +93,29 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def update_remarks
-    if invoice.nil?
+    # Invoice not found
+    if self.state == 'missing'
       self.remarks += ", Rechnung ##{invoice_id} nicht gefunden"
-    elsif invoice.state == 'paid'
-      # already paid
-      if invoice.amount == self.amount
-        # paid twice
-        self.remarks += ", doppelt bezahlt"
-      else
-        self.remarks += ", bereits bezahlt"
-      end
-    elsif !(invoice.active)
-      # canceled invoice
-      self.remarks += ", wurde bereits #{invoice.state_adverb}"
-    elsif invoice.amount == self.amount
-      # TODO much too open condition (issue #804)
-      # reminder fee not paid
-      self.remarks += ", Mahnspesen nicht bezahlt"
-    else
-      # bad amount
-      self.remarks += ", falscher Betrag"
+      return
     end
+
+    # Remark if invoice should not get payment according to state
+    if !(invoice.active)
+      self.remarks += ", wurde bereits #{invoice.state_adverb}"
+      return
+    end
+
+    # Perfect payment
+    return if invoice.balance == 0
+
+    # Paid more than once
+    if (self.state == 'overpaid') and (invoice.amount == self.amount)
+      self.remarks += ", mehrfach bezahlt"
+      return
+    end
+
+    # Simply mark bad amount otherwise
+    self.remarks += ", falscher Betrag"
   end
 
   def update_state
@@ -140,7 +142,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   # Invoices
-  before_create :assign_invoice, :create_esr_booking, :update_invoice_state, :update_remarks, :update_state
+  before_create :assign_invoice, :create_esr_booking, :update_state, :update_remarks, :update_invoice_state
   
   private
   def assign_invoice
