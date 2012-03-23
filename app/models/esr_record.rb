@@ -140,7 +140,7 @@ class EsrRecord < ActiveRecord::Base
   end
 
   # Invoices
-  before_create :assign_invoice, :create_esr_booking, :update_remarks, :update_state
+  before_create :assign_invoice, :create_esr_booking, :update_invoice_state, :update_remarks, :update_state
   
   private
   def assign_invoice
@@ -183,6 +183,12 @@ class EsrRecord < ActiveRecord::Base
     self.booking = esr_booking
     
     return esr_booking
+  end
+
+  def update_invoice_state
+    if invoice
+      invoice.calculate_state
+    end
   end
 
 public
