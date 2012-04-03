@@ -1,12 +1,8 @@
 
-= semantic_form_for resource do |f|
-  = f.semantic_errors
+= simple_form_for resource do |f|
+  = f.input :file, :as => :file
 
-  = f.inputs do
-    = f.input :file, :as => :file
+  .row-fluid
+    .span12= f.input :remarks, :input_html => {:rows => 4}
 
-    .row-fluid
-      .span10= f.input :remarks, :input_html => {:rows => 4, :class => 'span10'}
-
-  = f.buttons do
-    = f.commit_button
+  = f.button :submit
