@@ -5,13 +5,10 @@
 .page-head
   %h1 VESR Protokoll vom #{l(@esr_file.updated_at.to_date)}
 
-- if params['show_valid'].present?
-  %h3 Korrekte Zahlungen
-  = render 'esr_records/list', :esr_records => @esr_file.esr_records.valid
-- else
-  .alert-message.block-message.fade.in.success{'data-alert' => 'alert'}
-    %a.close{:href => '#'} &times;
-    = "#{@esr_file.esr_records.valid.count} korrekt verbuchte Zahlungen."
+= boot_page_title
+
+%h3 Korrekte Zahlungen
+= render 'esr_records/list', :esr_records => @esr_file.esr_records.valid
 
 - unless @esr_file.esr_records.invalid.empty?
   %h3 Falscher Betrag
