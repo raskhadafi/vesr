@@ -20,5 +20,3 @@
 - unless @esr_file.esr_records.missing.empty?
   %h3 Rechnung nicht gefunden
   = render 'esr_records/list', :esr_records => @esr_file.esr_records.missing
-
-= render :partial => 'sidebar'
