@@ -1,9 +1,4 @@
-.contextual
-  = link_to_function "Protokoll drucken", 'window.print()', :class => "icon icon-print"
-  = link_to "VESR Liste", esr_files_path, :class => "icon icon-book"
-  = link_to t_action(:show_all), {:show_valid => true}, :class => 'icon icon-show_all' unless params['show_valid']
-.page-head
-  %h1 VESR Protokoll vom #{l(@esr_file.updated_at.to_date)}
+= contextual_links
 
 = boot_page_title
 
