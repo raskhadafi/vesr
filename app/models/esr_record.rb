@@ -190,6 +190,7 @@ class EsrRecord < ActiveRecord::Base
   def update_invoice_state
     if invoice
       invoice.calculate_state
+      invoice.save
     end
   end
 
