@@ -1,3 +1,12 @@
+0.12.5
+======
+* Only call Invoice.calculate_state callback on EsrRecord saving if available
+
+0.12.4
+======
+* Use other remarks for underpaid esr records
+* Simpler EsrFile.to_s
+
 0.12.3
 ======
 * Call save on invoice after updating invoice state
