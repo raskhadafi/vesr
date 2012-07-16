@@ -9,7 +9,3 @@
       %th.action-links
   %tbody
     = render @esr_files
-
-  %tfoot
-    %tr#invoices_list_footer
-      %th{:colspan => 5}= will_paginate @esr_files, :params => {:query => params[:query]}
