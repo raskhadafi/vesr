@@ -1,3 +1,8 @@
+0.12.6
+======
+* Add default sorting scope by descending created_at to EsrFile
+* Drop pagination footer from esr_files/list.
+
 0.12.5
 ======
 * Only call Invoice.calculate_state callback on EsrRecord saving if available
