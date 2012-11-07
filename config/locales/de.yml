@@ -34,7 +34,7 @@ de:
     new:
       title:              VESR Datei einlesen
     index:
-      index:              VESR Liste
+      title:              VESR Journal
 
   # CRUD
   crud:
