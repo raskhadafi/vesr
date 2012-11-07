@@ -1,4 +1,9 @@
+# encoding: utf-8
+
 class EsrFile < ActiveRecord::Base
+  # Access restrictions
+  attr_accessible :file, :remarks
+
   # Default sorting
   default_scope order('created_at DESC')
 

@@ -1,4 +1,9 @@
+# encoding: utf-8
+
 class EsrRecord < ActiveRecord::Base
+  # Access restrictions
+  attr_accessible :file, :remarks
+
   belongs_to :esr_file
   
   belongs_to :booking, :dependent => :destroy, :autosave => true
