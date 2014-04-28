@@ -1,3 +1,11 @@
+table {
+  &.esr_records, &.esr_files {
+    .right {
+      text-align: right;
+    }
+  }
+}
+
 tr.esr_record.overpaid {
   background-color: #FCF8E3;
 }
