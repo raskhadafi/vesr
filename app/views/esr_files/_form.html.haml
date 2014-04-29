@@ -1,7 +1,4 @@
 = simple_form_for resource do |f|
   = f.input :file, :as => :file
 
-  .row-fluid
-    .span12= f.input :remarks, :input_html => {:rows => 4}
-
   = f.button :submit
