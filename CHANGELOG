@@ -1,3 +1,14 @@
+0.13.0
+======
+* Drop noop tests.
+* Use SCSS for vesr stylesheet.
+* Add style for .right class in tables.
+* Validate presence of file when creating a new esr_file.
+* Implement detection of duplicated ESR records.
+* Drop remarks field from esr file upload.
+* Use proper bootstrap markup for esr file upload form.
+* Proper currency value alignment in tables.
+
 0.12.6
 ======
 * Add default sorting scope by descending created_at to EsrFile
