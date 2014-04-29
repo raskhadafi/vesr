@@ -9,9 +9,10 @@ class EsrFile < ActiveRecord::Base
 
   # File upload
   mount_uploader :file, EsrFileUploader
+  validates :file, :presence => true
 
   has_many :esr_records, :dependent => :destroy
-  
+
   # String
   def to_s(format = :default)
     case format
