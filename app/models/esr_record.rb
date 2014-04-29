@@ -222,7 +222,7 @@ class EsrRecord < ActiveRecord::Base
     end
   end
 
-public
+  public
   def create_write_off_booking
     invoice.write_off("Korrektur nach VESR Zahlung").save
   end
