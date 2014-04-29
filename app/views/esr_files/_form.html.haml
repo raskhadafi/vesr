@@ -1,4 +1,6 @@
 = simple_form_for resource do |f|
-  = f.input :file, :as => :file
+  .row-fluid
+    = f.input :file, :as => :file
 
-  = f.button :submit
+  .form-actions
+    = f.button :submit
