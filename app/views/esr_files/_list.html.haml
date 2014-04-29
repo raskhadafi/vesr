@@ -2,10 +2,10 @@
   %thead
     %tr   
       %th= t_attr :updated_at, EsrFile
-      %th.right= t_attr :bookings, EsrFile
-      %th.right= t_attr :invalid_bookings, EsrFile
-      %th.right= t_attr :missing_bookings, EsrFile
-      %th.right= t_attr :total_amount, EsrFile
+      %th.currency= t_attr :bookings, EsrFile
+      %th.currency= t_attr :invalid_bookings, EsrFile
+      %th.currency= t_attr :missing_bookings, EsrFile
+      %th.currency= t_attr :total_amount, EsrFile
       %th.action-links
   %tbody
     = render @esr_files
