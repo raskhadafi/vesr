@@ -9,6 +9,13 @@
 * Use proper bootstrap markup for esr file upload form.
 * Proper currency value alignment in tables.
 
+0.12.7
+======
+* Fix key for esr_file index title.
+* New (unused?) method EsrRecord#create_write_off_booking.
+* Use Invoice#book_extra_earning if invoice is available when creating extra earning booking.
+* Add attr_accessible declarations to models.
+
 0.12.6
 ======
 * Add default sorting scope by descending created_at to EsrFile
