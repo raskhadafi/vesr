@@ -5,10 +5,10 @@ class EsrRecord < ActiveRecord::Base
   attr_accessible :file, :remarks
 
   belongs_to :esr_file
-  
+
   belongs_to :booking, :dependent => :destroy, :autosave => true
   belongs_to :invoice
-  
+
   # State Machine
   include AASM
   aasm_column :state
@@ -21,6 +21,7 @@ class EsrRecord < ActiveRecord::Base
   aasm_state :overpaid
   aasm_state :underpaid
   aasm_state :resolved
+  aasm_state :duplicate
 
   aasm_event :write_off do
     transitions :from => :underpaid, :to => :resolved
@@ -34,9 +35,10 @@ class EsrRecord < ActiveRecord::Base
     transitions :from => [:overpaid, :missing], :to => :resolved
   end
 
-  scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved'])
+  scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved', 'duplicate'])
   scope :unsolved, where(:state => ['overpaid', 'underpaid', 'missing'])
   scope :valid, where(:state => 'paid')
+
 
   private
   def parse_date(value)
@@ -50,15 +52,15 @@ class EsrRecord < ActiveRecord::Base
   def payment_date=(value)
     write_attribute(:payment_date, parse_date(value))
   end
-  
+
   def transaction_date=(value)
     write_attribute(:transaction_date, parse_date(value))
   end
-  
+
   def value_date=(value)
     write_attribute(:value_date, parse_date(value))
   end
-  
+
   def reference=(value)
     write_attribute(:reference, value[0..-2])
   end
@@ -130,6 +132,11 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def update_state
+    if duplicate_of.present?
+      self.state = 'duplicate'
+      return
+    end
+
     if self.invoice.nil?
       self.state = 'missing'
       return
@@ -154,7 +161,7 @@ class EsrRecord < ActiveRecord::Base
 
   # Invoices
   before_create :assign_invoice, :create_esr_booking, :update_state, :update_remarks, :update_invoice_state
-  
+
   private
   def assign_invoice
     # Prepare remarks to not be null
@@ -168,12 +175,19 @@ class EsrRecord < ActiveRecord::Base
       self.invoice = imported_invoice
     end
   end
-  
+
   def vesr_account
     BankAccount.find_by_esr_id(client_id)
   end
 
+  # Tries to find a record this would duplicate
+  def duplicate_of
+    EsrRecord.where(:reference => reference, :bank_pc_id => bank_pc_id, :amount => amount, :payment_date => payment_date, :transaction_date => transaction_date).first
+  end
+
   def create_esr_booking
+    return if duplicate_of.present?
+
     if invoice
       esr_booking = invoice.bookings.build
       debit_account = invoice.balance_account
@@ -181,7 +195,7 @@ class EsrRecord < ActiveRecord::Base
       esr_booking = Booking.new
       debit_account = Invoice.direct_account
     end
-    
+
     esr_booking.update_attributes(
       :amount         => amount,
       :credit_account => vesr_account,
@@ -190,11 +204,11 @@ class EsrRecord < ActiveRecord::Base
       :title          => "VESR Zahlung",
       :comments       => remarks
     )
-    
+
     esr_booking.save
- 
+
     self.booking = esr_booking
-    
+
     return esr_booking
   end
 
