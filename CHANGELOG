@@ -1,3 +1,7 @@
+0.13.1
+======
+* Show duplicate ESR records in own section.
+
 0.13.0
 ======
 * Drop noop tests.
