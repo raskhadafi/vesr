@@ -35,7 +35,7 @@ class EsrRecord < ActiveRecord::Base
     transitions :from => [:overpaid, :missing], :to => :resolved
   end
 
-  scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved', 'duplicate'])
+  scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved'])
   scope :unsolved, where(:state => ['overpaid', 'underpaid', 'missing'])
   scope :valid, where(:state => 'paid')
 
