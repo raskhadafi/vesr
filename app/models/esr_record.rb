@@ -116,7 +116,7 @@ class EsrRecord < ActiveRecord::Base
     return if invoice.balance == 0
 
     # Paid more than once
-    if (self.state == 'overpaid') and (invoice.amount == self.amount)
+    if (self.state == 'overpaid') && (invoice.amount == self.amount)
       self.remarks += ", mehrfach bezahlt"
       return
     end
