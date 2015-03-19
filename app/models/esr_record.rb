@@ -198,8 +198,8 @@ class EsrRecord < ActiveRecord::Base
 
     esr_booking.update_attributes(
       :amount         => amount,
-      :credit_account => vesr_account,
       :debit_account  => debit_account,
+      :credit_account => vesr_account,
       :value_date     => value_date,
       :title          => "VESR Zahlung",
       :comments       => remarks
