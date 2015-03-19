@@ -193,7 +193,7 @@ class EsrRecord < ActiveRecord::Base
       debit_account = invoice.balance_account
     else
       esr_booking = Booking.new
-      debit_account = Invoice.direct_account
+      debit_account = DebitInvoice.balance_account
     end
 
     esr_booking.update_attributes(
