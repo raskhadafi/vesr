@@ -100,6 +100,11 @@ class EsrRecord < ActiveRecord::Base
   end
 
   def update_remarks
+    # Duplicate
+    if self.state == 'duplicate'
+      return
+    end
+
     # Invoice not found
     if self.state == 'missing'
       self.remarks += ", Rechnung ##{invoice_id} nicht gefunden"
