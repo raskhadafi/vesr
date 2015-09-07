@@ -188,7 +188,7 @@ class EsrRecord < ActiveRecord::Base
 
   # Tries to find a record this would duplicate
   def duplicate_of
-    EsrRecord.where(:reference => reference, :bank_pc_id => bank_pc_id, :amount => amount, :payment_date => payment_date, :transaction_date => transaction_date).first
+    EsrRecord.where(:reference => reference, :bank_pc_id => bank_pc_id, :amount => amount, :payment_date => payment_date, :transaction_date => transaction_date).where("id != ?", id).first
   end
 
   def create_esr_booking
