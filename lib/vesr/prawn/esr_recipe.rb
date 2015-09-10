@@ -7,8 +7,10 @@ module Prawn
     include ActionView::Helpers::TranslationHelper
 
     def draw_account_detail(bank, sender, print_payment_for)
-      text bank.vcard.full_name
-      text bank.vcard.postal_code + " " + bank.vcard.locality
+      if bank
+        text bank.vcard.full_name
+        text bank.vcard.postal_code + " " + bank.vcard.locality
+      end
 
       text " "
       if print_payment_for
