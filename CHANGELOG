@@ -1,3 +1,11 @@
+1.0.0.beta0
+===========
+* Use .balance_account of DebitInvoice instead of Invoice.
+* Fix remark update for duplicates.
+* Add aasm as dependency and update syntax.
+* Fix only mark as duplicates if correct
+
+
 0.13.1
 ======
 * Show duplicate ESR records in own section.

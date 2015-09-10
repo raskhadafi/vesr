@@ -16,5 +16,7 @@ Gem::Specification.new do |s|
   s.files        = `git ls-files app lib config db`.split("\n")
   s.platform     = Gem::Platform::RUBY
 
+  s.add_runtime_dependency 'aasm', '~> 4.1'
+
   s.extra_rdoc_files = ["README.rdoc", "LICENSE.txt"]
 end

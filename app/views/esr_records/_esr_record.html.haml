@@ -6,5 +6,5 @@
   %td.currency= currency_fmt(esr_record.amount.currency_round)
   %td.currency= currency_fmt(esr_record.invoice.balance.currency_round) if esr_record.invoice
   %td.action-links
-    - esr_record.aasm_events_for_current_state.each do |event|
+    - esr_record.aasm.events.each do |event|
       = link_to image_tag("16x16/#{event}.png"), polymorphic_url([event, esr_record]), :remote => true, :method => :post, :title => t_action(event)

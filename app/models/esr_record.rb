@@ -11,28 +11,29 @@ class EsrRecord < ActiveRecord::Base
 
   # State Machine
   include AASM
-  aasm_column :state
+
   validates_presence_of :state
 
-  aasm_initial_state :ready
-  aasm_state :ready
-  aasm_state :paid
-  aasm_state :missing
-  aasm_state :overpaid
-  aasm_state :underpaid
-  aasm_state :resolved
-  aasm_state :duplicate
+  aasm :column => :state do
+    state :ready, :initial => true
+    state :paid
+    state :missing
+    state :overpaid
+    state :underpaid
+    state :resolved
+    state :duplicate
 
-  aasm_event :write_off do
-    transitions :from => :underpaid, :to => :resolved
-  end
+    event :write_off do
+      transitions :from => :underpaid, :to => :resolved
+    end
 
-  aasm_event :resolve do
-    transitions :from => :underpaid, :to => :resolved
-  end
+    event :resolve do
+      transitions :from => :underpaid, :to => :resolved
+    end
 
-  aasm_event :book_extra_earning do
-    transitions :from => [:overpaid, :missing], :to => :resolved
+    event :book_extra_earning do
+      transitions :from => [:overpaid, :missing], :to => :resolved
+    end
   end
 
   scope :invalid, where(:state => ['overpaid', 'underpaid', 'resolved'])
@@ -187,7 +188,7 @@ class EsrRecord < ActiveRecord::Base
 
   # Tries to find a record this would duplicate
   def duplicate_of
-    EsrRecord.where(:reference => reference, :bank_pc_id => bank_pc_id, :amount => amount, :payment_date => payment_date, :transaction_date => transaction_date).first
+    EsrRecord.where(:reference => reference, :bank_pc_id => bank_pc_id, :amount => amount, :payment_date => payment_date, :transaction_date => transaction_date).where("id != ?", id).first
   end
 
   def create_esr_booking
