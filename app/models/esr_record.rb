@@ -1,6 +1,10 @@
 # encoding: utf-8
 
 class EsrRecord < ActiveRecord::Base
+  SUPPORTED_RECORD_TYPES = [
+    :lsv_credit
+  ]
+
   # Access restrictions
   attr_accessible :file, :remarks
 
@@ -40,6 +44,11 @@ class EsrRecord < ActiveRecord::Base
   scope :unsolved, where(:state => ['overpaid', 'underpaid', 'missing'])
   scope :valid, where(:state => 'paid')
 
+  def self.supported_line?(line)
+    record_type_code = line[0..2]
+    record_type = EsrRecordTypes.lookup_code record_type_code
+    SUPPORTED_RECORD_TYPES.include?(record_type)
+  end
 
   private
   def parse_date(value)
