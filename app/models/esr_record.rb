@@ -240,8 +240,8 @@ class EsrRecord < ActiveRecord::Base
       Booking.create(:title => "Ausserordentlicher Ertrag",
                    :comments => comments || "Zahlung kann keiner Rechnung zugewiesen werden",
                    :amount => self.amount,
-                   :debit_account  => Account.find_by_code(Invoice.settings['invoices.extra_earnings_account_code']),
-                   :credit_account => Account.find_by_code(Invoice.settings['invoices.balance_account_code']),
+                   :debit_account  => vesr_account,
+                   :credit_account => Account.find_by_tag('vesr:extra-earnings'),
                    :value_date => Date.today)
     end
   end
