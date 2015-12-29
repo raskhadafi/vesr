@@ -31,8 +31,19 @@ class EsrFile < ActiveRecord::Base
 
   private
   def create_records
-    File.new(file.current_path).each {|line|
-      self.esr_records << EsrRecord.new.parse(line) unless line[0..2] == '999'
-    }
+    File.new(file.current_path).each do |line|
+      if EsrRecord.supported_line?(line)
+        esr_records << create_esr_record(line)
+      else
+        Rails.logger.info "VESR: Ignoring line #{line}"
+      end
+    end
+  end
+
+  def create_esr_record(line)
+    record = EsrRecord.new.parse(line)
+    record.save
+    Rails.logger.error "VESR: Record #{record.inspect} is invalid: #{record.errors.inspect}" unless record.valid?
+    record
   end
 end

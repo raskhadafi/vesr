@@ -19,4 +19,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'aasm', '~> 4.1'
 
   s.extra_rdoc_files = ["README.rdoc", "LICENSE.txt"]
+
+  s.add_development_dependency 'rspec', '~> 3.4.0'
 end
