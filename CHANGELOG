@@ -1,10 +1,22 @@
+1.0.1
+=====
+* use the event name instead of the object
+* Use new tag system to find the accounts for extra earnings
+* Add and configure RSpec
+* Only handle LSV records as only they are supported currently
+* As the bill has been payed, ensure the amount on the debit account is reduced, not increased
+* Replace action icons with glyphicons
+
+1.0.0
+=====
+* Handle missing bank gracefully.
+
 1.0.0.beta0
 ===========
 * Use .balance_account of DebitInvoice instead of Invoice.
 * Fix remark update for duplicates.
 * Add aasm as dependency and update syntax.
-* Fix only mark as duplicates if correct
-
+* Fix only mark as duplicates if correct.
 
 0.13.1
 ======
