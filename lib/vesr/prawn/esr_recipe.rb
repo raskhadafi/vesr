@@ -1,6 +1,9 @@
 require 'action_view/helpers/translation_helper'
 require 'action_view/helpers'
 
+require 'vesr/reference_builder'
+require 'vesr/validation_digit_calculator'
+
 module Prawn
   module EsrRecipe
 
@@ -110,31 +113,17 @@ module Prawn
     end
 
     def esr9_reference(invoice, esr_account)
-      esr9_format(esr9_add_validation_digit(esr_number(esr_account.esr_id, invoice.customer.id, invoice.id)))
+      esr_number = VESR::ReferenceBuilder.call(invoice.customer.id, invoice.id, esr_account.esr_id)
+      esr9_format VESR::ValidationDigitCalculator.call(esr_number)
     end
 
     def esr9_build(esr_amount, invoice, biller_id, esr_id)
       # 01 is type 'Einzahlung in CHF'
       amount_string = "01#{sprintf('%011.2f', esr_amount).delete('.')}"
-      id_string = esr_number(esr_id, invoice.customer.id, invoice.id)
+      id_string = VESR::ReferenceBuilder.call(invoice.customer.id, invoice.id, esr_id)
       biller_string = esr9_format_account_id(biller_id)
 
-      "#{esr9_add_validation_digit(amount_string)}>#{esr9_add_validation_digit(id_string)}+ #{biller_string}>"
-    end
-
-    def esr_number(esr_id, customer_id, invoice_id)
-      customer_id_length = 19 - esr_id.to_s.length
-      esr_id.to_s + sprintf("%0#{customer_id_length}i", customer_id).delete(' ') + sprintf('%07i', invoice_id).delete(' ')
-    end
-
-    def esr9_add_validation_digit(value)
-      # Defined at http://www.pruefziffernberechnung.de/E/Einzahlungsschein-CH.shtml
-      esr9_table = [0, 9, 4, 6, 8, 2, 7, 1, 3, 5]
-      digit = 0
-      value.split('').map{|c| digit = esr9_table[(digit + c.to_i) % 10]}
-      digit = (10 - digit) % 10
-
-      "#{value}#{digit}"
+      "#{VESR::ValidationDigitCalculator.call(amount_string)}>#{VESR::ValidationDigitCalculator.call(id_string)}+ #{biller_string}>"
     end
 
     def esr9_format(reference_code)
