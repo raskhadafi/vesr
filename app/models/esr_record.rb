@@ -2,7 +2,8 @@
 
 class EsrRecord < ActiveRecord::Base
   SUPPORTED_RECORD_TYPES = [
-    :lsv_credit
+    :lsv_credit,
+    :esr_e_banking_credit
   ]
 
   # Access restrictions
